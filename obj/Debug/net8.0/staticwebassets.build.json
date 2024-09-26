@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "hyl2F/sOv8Z1nJOJSlfxrIylTeMHu5jVzqNNhZYRxfA=",
+  "Source": "app_version",
+  "BasePath": "_content/app_version",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
