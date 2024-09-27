@@ -166,3 +166,4 @@ B:\source\app_version\app_version\obj\Debug\net8.0\refint\app_version.dll
 B:\source\app_version\app_version\obj\Debug\net8.0\app_version.pdb
 B:\source\app_version\app_version\obj\Debug\net8.0\app_version.genruntimeconfig.cache
 B:\source\app_version\app_version\obj\Debug\net8.0\ref\app_version.dll
+B:\source\app_version\app_version\obj\Debug\net8.0\app_version.sourcelink.json

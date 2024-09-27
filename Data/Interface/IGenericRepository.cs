@@ -12,6 +12,7 @@ namespace API_Task.Data.Interface
         Task CreateRangeAsync(List<T> entity);
         Task UpdateAsync(T entity);
         void DeleteAsync(T entity);
+
         void DeleteRangeAsync(List<T> entity);
         Task<bool> IsExistsAsync(Expression<Func<T, bool>> expression = null);
         Task ExecuteSQLProcedureAsync(string param);

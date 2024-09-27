@@ -5,9 +5,8 @@ namespace API_Task.Data.Interface
 {
     public interface IUnitOfWork : IDisposable
     {
-      //  IGenericRepository<DepartmentModel> Departments { get; }
-        IGenericRepository<AppVersionModel> GetEmpolyees { get; }
-     
+ IGenericRepository<AppVersionModel> getAppVersion { get; }
+
 
         Task SaveAsync();
         Task ExecuteProcedureWithoutResult(string query);

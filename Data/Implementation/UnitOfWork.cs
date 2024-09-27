@@ -18,7 +18,7 @@ namespace API_Task.Data.Implementation
             _context = context;
         }
 
-        public IGenericRepository<AppVersionModel> GetEmpolyees => _AppVersion ??= new GenericRepository<AppVersionModel>(_context);
+        public IGenericRepository<AppVersionModel> getAppVersion => _AppVersion ??= new GenericRepository<AppVersionModel>(_context);
 
         public void Dispose()
         {

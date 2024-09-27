@@ -17,14 +17,19 @@
   },
   {
     "ContainingType": "app_version.Controllers.AppVersionController",
-    "Method": "CreateAppVersion",
-    "RelativePath": "api/AppVersion/create-app-version",
-    "HttpMethod": "POST",
+    "Method": "UpdateAppVersion",
+    "RelativePath": "api/AppVersion/{applicationId}",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "appversiondto",
+        "Name": "applicationId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "appVersionDto",
         "Type": "app_version.Model.DTO.AppVersionDTO",
         "IsRequired": true
       }
@@ -32,24 +37,35 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "app_version.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
+    "ContainingType": "app_version.Controllers.AppVersionController",
+    "Method": "DeleteAppVersion",
+    "RelativePath": "api/AppVersion/{applicationId}",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[app_version.WeatherForecast, app_version, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "applicationId",
+        "Type": "System.String",
+        "IsRequired": true
       }
     ],
-    "EndpointName": "GetWeatherForecast"
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "app_version.Controllers.AppVersionController",
+    "Method": "CreateAppVersion",
+    "RelativePath": "api/AppVersion/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "appVersionDto",
+        "Type": "app_version.Model.DTO.AppVersionDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

@@ -4,6 +4,7 @@ using app_version.Model;
 using app_version.Model.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 
 namespace app_version.Controllers
@@ -13,19 +14,18 @@ namespace app_version.Controllers
     public class AppVersionController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ApplicationDbContext db;
+        private readonly ApplicationDbContext _db;
 
-        public AppVersionController(IUnitOfWork unitOfWork,ApplicationDbContext db)
+        public AppVersionController(IUnitOfWork unitOfWork, ApplicationDbContext db)
         {
             _unitOfWork = unitOfWork;
-            this.db = db;
+            _db = db;
         }
 
-        // POST: Create App Version
-        [HttpPost("create-app-version")]
-        public async Task<IActionResult> CreateAppVersion(AppVersionDTO appversiondto)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateAppVersion(AppVersionDTO appVersionDto)
         {
-            if (appversiondto == null || !ModelState.IsValid)
+            if (appVersionDto == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -34,22 +34,22 @@ namespace app_version.Controllers
             {
                 var appVersion = new AppVersionModel
                 {
-                    ApplicationId = appversiondto.ApplicationId,
-                    Version = appversiondto.Version,
-                    IsLate = appversiondto.IsLate,
-                    Message = appversiondto.Message,
-                    IosUrl = appversiondto.IosUrl,
-                    AndroidUrl = appversiondto.AndroidUrl
+                    ApplicationId = appVersionDto.ApplicationId,
+                    Version = appVersionDto.Version,
+                    IsLate = appVersionDto.IsLate,
+                    Message = appVersionDto.Message,
+                    IosUrl = appVersionDto.IosUrl,
+                    AndroidUrl = appVersionDto.AndroidUrl
                 };
 
-                await _unitOfWork.GetEmpolyees.CreateAsync(appVersion);
+                await _unitOfWork.getAppVersion.CreateAsync(appVersion);
                 await _unitOfWork.SaveAsync();
 
-                return Ok("App version created successfully.");
+                return CreatedAtAction(nameof(GetAppVersion), new { applicationId = appVersion.ApplicationId }, appVersion);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while creating the app version.");
+                return StatusCode(500, $"An error occurred while creating the app version: {ex.Message}");
             }
         }
 
@@ -58,8 +58,8 @@ namespace app_version.Controllers
         {
             try
             {
-                //var appVersion = await _unitOfWork.GetEmpolyees.GetAsync(av => av.ApplicationId == applicationId);
-                var appVersion = await db.GetAppVersions.Where(x=>x.ApplicationId==applicationId).Select(x=>x.Version).SingleOrDefaultAsync();
+                var appVersion = await _unitOfWork.getAppVersion.GetAsync(av => av.ApplicationId == applicationId);
+
                 if (appVersion == null)
                 {
                     return NotFound($"No app version found for ApplicationId: {applicationId}");
@@ -67,9 +67,66 @@ namespace app_version.Controllers
 
                 return Ok(appVersion);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while retrieving the app version.");
+                return StatusCode(500, $"An error occurred while retrieving the app version: {ex.Message}");
+            }
+        }
+
+        [HttpPut("{applicationId}")]
+        public async Task<IActionResult> UpdateAppVersion(string applicationId, AppVersionDTO appVersionDto)
+        {
+            if (appVersionDto == null || !ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var existingAppVersion = await _unitOfWork.getAppVersion.GetAsync(av => av.ApplicationId == applicationId);
+
+                if (existingAppVersion == null)
+                {
+                    return NotFound($"No app version found for ApplicationId: {applicationId}");
+                }
+
+                existingAppVersion.Version = appVersionDto.Version;
+                existingAppVersion.IsLate = appVersionDto.IsLate;
+                existingAppVersion.Message = appVersionDto.Message;
+                existingAppVersion.IosUrl = appVersionDto.IosUrl;
+                existingAppVersion.AndroidUrl = appVersionDto.AndroidUrl;
+
+                await _unitOfWork.getAppVersion.UpdateAsync(existingAppVersion);
+                await _unitOfWork.SaveAsync();
+
+                return Ok(existingAppVersion);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the app version: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{applicationId}")]
+        public async Task<IActionResult> DeleteAppVersion(string applicationId)
+        {
+            try
+            {
+                var appVersion = await _unitOfWork.getAppVersion.GetAsync(av => av.ApplicationId == applicationId);
+
+                if (appVersion == null)
+                {
+                    return NotFound($"No app version found for ApplicationId: {applicationId}");
+                }
+
+                 _unitOfWork.getAppVersion.DeleteAsync(appVersion);
+                await _unitOfWork.SaveAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the app version: {ex.Message}");
             }
         }
     }
